@@ -227,12 +227,12 @@ public class GDrawingPanel extends JPanel {
     public void ovalDraw(Graphics g) {
     	g.setColor(Color.RED);
         for (Rectangle o : ovals) {
-            g.drawOval(o);
+            g.drawOval(o.x,o.y,o.width,o.height);
         }
         
         if (ovalHandler.tempOval != null) {//실시간 draw 출력
             g.setColor(Color.BLUE);
-            g.drawOval(tempOval);
+            g.drawOval(tempOval.x,tempOval.y,tempOval.width,tempOval.height);
         }
     }
 }

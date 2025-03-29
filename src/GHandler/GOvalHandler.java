@@ -40,8 +40,8 @@ public class GOvalHandler extends MouseAdapter {
             if (isMoving) { //move모드일떄
                 selectedOvalIndex = -1; //index 초기화 후 선택된 rectangles 찾는 로직
                 for (int i = 0; i < ovals.size(); i++) {
-                    Rectangle r = ovals.get(i);
-                    if (r.contains(startPoint)) { //사각형 그림 안에 startpoint 좌표가있는지(커서가 안에 있는지)
+                    Rectangle o = ovals.get(i);
+                    if (o.contains(startPoint)) { //사각형 그림 안에 startpoint 좌표가있는지(커서가 안에 있는지)
                         selectedOvalIndex = i; //인덱스만 저장
                         currentPoint = startPoint;
                         System.out.println("Selected Oval Index: " + selectedOvalIndex);
@@ -49,7 +49,7 @@ public class GOvalHandler extends MouseAdapter {
                     }
                 }
             } else {
-                // Not in moving mode, prepare for drawing
+                // Move모드 아닌 Draw모드일땐 그리기 준비
                 tempOval = new Rectangle(startPoint.x, startPoint.y, 0, 0);
             }
         }
