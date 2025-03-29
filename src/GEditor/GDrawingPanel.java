@@ -7,9 +7,11 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
+import GButton.GOvalButton;
 import GButton.GPolButton;
 import GButton.GRecButton;
 import GButton.GTriButton;
+import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTriHandler;
@@ -19,21 +21,26 @@ public class GDrawingPanel extends JPanel {
     private ArrayList<Rectangle> rectangles;
     private ArrayList<Polygon> triangles;
     private ArrayList<Polygon> polygons;
+    private ArrayList<Rectangle> ovals;
     private GRecButton recButton;
     private GRecHandler recHandler;
     private GTriButton triButton;
     private GTriHandler triHandler;
     private GPolButton polButton;
     private GPolHandler polHandler;
+    private GOvalButton ovalButton;
+    private GOvalHandler ovalHandler;
     
     Rectangle tempRectangle;
     Polygon tempTriangle;
     Polygon tempPolygon;
+    Rectangle tempOval;
 
     public GDrawingPanel() {
         this.rectangles = new ArrayList<>();
         this.triangles = new ArrayList<>();
         this.polygons = new ArrayList<>();
+        this.ovals = new ArrayList<>();
     }
     
     public void setRecHandler(GRecHandler handler) {
@@ -46,6 +53,10 @@ public class GDrawingPanel extends JPanel {
     
     public void setPolHandler(GPolHandler handler) {
     	this.polHandler = handler;
+    }
+    
+    public void setOvalHandler(GOvalHandler handler) {
+    	this.ovalHandler = handler;
     }
 
     public void setRecButton(GRecButton recButton) {
@@ -69,6 +80,12 @@ public class GDrawingPanel extends JPanel {
     	}
     }
     
+    public void setOvalButton(GOvalButton ovalButton) {
+    	this.ovalButton = ovalButton;
+    	if (ovalHandler != null) {
+    		ovalHandler.setOvalButton(ovalButton);
+    	}
+    }
 
     public void initialize() {
         if(recHandler != null) {
@@ -82,6 +99,10 @@ public class GDrawingPanel extends JPanel {
         if(polHandler != null) {
         	this.addMouseListener(polHandler);
             this.addMouseMotionListener(polHandler);
+        }
+        if(ovalHandler != null) {
+        	this.addMouseListener(ovalHandler);
+            this.addMouseMotionListener(ovalHandler);
         }
     }
     
@@ -105,6 +126,12 @@ public class GDrawingPanel extends JPanel {
     	repaint();
     }
     
+    public void addOval(Rectangle o) {
+    	System.out.println("add Oval Complete");
+    	ovals.add(o);
+    	repaint();
+    }
+    
     
     
     public void setTempRectangle(Rectangle tempRectangle) {
@@ -118,6 +145,10 @@ public class GDrawingPanel extends JPanel {
     public void setTempPolygon(Polygon tempPolygon) {
     	this.tempPolygon = tempPolygon;
     }
+    
+    public void setTempOval(Rectangle tempOval) {
+    	this.tempOval = tempOval;
+    }
 
     public ArrayList<Rectangle> getRectangles() {
         return rectangles; //move모드에서 쓰기 위한 정보
@@ -129,6 +160,10 @@ public class GDrawingPanel extends JPanel {
     
     public ArrayList<Polygon> getPolygons() {
     	return polygons;
+    }
+    
+    public ArrayList<Rectangle> getOvals() {
+    	return ovals;
     }
 
     @Override
@@ -142,6 +177,9 @@ public class GDrawingPanel extends JPanel {
         }
         if(polButton != null) {
         	polDraw(g);
+        }
+        if(ovalButton != null) {
+        	ovalDraw(g);
         }
     }
 
@@ -183,6 +221,18 @@ public class GDrawingPanel extends JPanel {
         if (polHandler.tempPolygon != null) {//실시간 draw 출력
             g.setColor(Color.BLUE);
             g.drawPolygon(tempPolygon);
+        }
+    }
+    
+    public void ovalDraw(Graphics g) {
+    	g.setColor(Color.RED);
+        for (Rectangle o : ovals) {
+            g.drawOval(o);
+        }
+        
+        if (ovalHandler.tempOval != null) {//실시간 draw 출력
+            g.setColor(Color.BLUE);
+            g.drawOval(tempOval);
         }
     }
 }

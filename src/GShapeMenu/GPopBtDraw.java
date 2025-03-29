@@ -2,6 +2,7 @@ package GShapeMenu;
 
 import javax.swing.JMenuItem;
 
+import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTriHandler;
@@ -14,6 +15,7 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
     private GRecHandler recHandler;
     private GTriHandler triHandler;
     private GPolHandler polHandler;
+    private GOvalHandler ovalHandler;
 
     public GPopBtDraw() {
         super("Draw");
@@ -57,6 +59,23 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
     
     public void initialize(GPolHandler handler) { 
         this.polHandler = handler;
+        this.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if(handler != null) {
+                handler.setMovingMode(false);
+                System.out.println("Draw 선택");
+            	} else {
+                	System.out.println("Draw 선택안됨");
+                }
+            }
+            
+        });
+
+    }
+    
+    public void initialize(GOvalHandler handler) { 
+        this.ovalHandler = handler;
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

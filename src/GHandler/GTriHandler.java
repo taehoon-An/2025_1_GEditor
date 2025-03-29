@@ -66,24 +66,24 @@ public class GTriHandler extends MouseAdapter {
                 int dx = currentPoint.x - startPoint.x;
                 int dy = currentPoint.y - startPoint.y;
 
-                // 계속 새롭게 이 좌표로 삼각형 그리기
+                // 현재 삼각형의 각 꼭잣점 x,y좌표를 저장해 실시간으로 생성하기 위한 준비
                 int[] newXPoints = new int[selectedTriangle.npoints];
                 int[] newYPoints = new int[selectedTriangle.npoints];
-                
+                //각 꼭짓점에 저장된 x,y좌표 움직인 좌표를 더해 움직인 곳에서의 좌표로 새로저장
                 for (int i = 0; i < selectedTriangle.npoints; i++) {
                     newXPoints[i] = selectedTriangle.xpoints[i] + dx;
                     newYPoints[i] = selectedTriangle.ypoints[i] + dy;
                 }
-                
+                //저장한 새 좌표에 대해서 triangle좌표를 추가하기
                 Polygon movedTriangle = new Polygon(newXPoints, newYPoints, selectedTriangle.npoints);
                 
                 // 새롭게 그리는 삼각형 정보를 선택한 인덱스 삼각형에 계속 저장
                 triangles.set(selectedTriangleIndex, movedTriangle);
-                
+                //다시 drag할때 똑같이 계산하기 위해서 startPoint를 현재 좌표로 설정
                 startPoint = currentPoint;
                 panel.repaint();
             } else if (!isMoving) {
-                // Drawing mode
+                // Drawing mode (꼭짓점 좌표 세개)
                 int x1 = startPoint.x;
                 int y1 = currentPoint.y;
 
@@ -93,6 +93,7 @@ public class GTriHandler extends MouseAdapter {
                 int x3 = currentPoint.x;
                 int y3 = currentPoint.y;
 
+                
                 tempTriangle.reset();
                 tempTriangle.addPoint(x1, y1);
                 tempTriangle.addPoint(x2, y2);
@@ -107,9 +108,9 @@ public class GTriHandler extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (triButton != null && triButton.isSelected() && !isMoving) {
-            if (tempTriangle != null && tempTriangle.npoints == 3) {
+            if (tempTriangle != null && tempTriangle.npoints == 3) {//꼭짓점 세개이고, 안비어있을떄
                 System.out.println("Triangle add 완");
-                panel.addTriangle(new Polygon(tempTriangle.xpoints, tempTriangle.ypoints, 3));
+                panel.addTriangle(new Polygon(tempTriangle.xpoints, tempTriangle.ypoints, 3));//triangle추가
             }
         }
         

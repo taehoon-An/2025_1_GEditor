@@ -3,6 +3,7 @@ package GEditor;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTriHandler;
@@ -45,6 +46,12 @@ public class GShape extends JPopupMenu {
 	
 	 public void initialize(GPolHandler handler) {
 		 System.out.println("pol button clear");
+		 	this.drawMenu.initialize(handler);
+		 	this.moveMenu.initialize(handler);
+	 }
+	 
+	 public void initialize(GOvalHandler handler) {
+		 System.out.println("oval button clear");
 		 	this.drawMenu.initialize(handler);
 		 	this.moveMenu.initialize(handler);
 	 }

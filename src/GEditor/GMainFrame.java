@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTriHandler;
@@ -22,6 +23,7 @@ public class GMainFrame extends JFrame {
 	private GRecHandler recHandler;
 	private GTriHandler triHandler;
 	private GPolHandler polHandler;
+	private GOvalHandler ovalHandler;
 	
 	public GMainFrame() {
 		//attributes
@@ -54,6 +56,7 @@ public class GMainFrame extends JFrame {
 		this.recHandler = new GRecHandler(drawingPanel);
 		this.triHandler = new GTriHandler(drawingPanel);
 		this.polHandler = new GPolHandler(drawingPanel);
+		this.ovalHandler = new GOvalHandler(drawingPanel);
 		
 		this.drawingPanel.setRecHandler(recHandler);
 		this.drawingPanel.setRecButton(toolBar.getRecButton());
@@ -61,10 +64,13 @@ public class GMainFrame extends JFrame {
 		this.drawingPanel.setTriButton(toolBar.getTriButton());
 		this.drawingPanel.setPolHandler(polHandler);
 		this.drawingPanel.setPolButton(toolBar.getPolButton());
+		this.drawingPanel.setOvalHandler(ovalHandler);
+		this.drawingPanel.setOvalButton(toolBar.getOvalButton());
 		
 		this.shapeMenu.initialize(recHandler);
 		this.shapeMenu.initialize(triHandler);
 		this.shapeMenu.initialize(polHandler);
+		this.shapeMenu.initialize(ovalHandler);
 		
 		this.menuBar.initialize();
 		this.toolBar.initialize();

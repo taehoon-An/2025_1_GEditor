@@ -39,9 +39,9 @@ public class GPolHandler extends MouseAdapter {
 
             if (isMoving) {
                 selectedPolygonIndex = -1; //인덱스 초기화
-                for (int i = 0; i < polygons.size(); i++) { //저장된 array에서 선택된 삼각형 인덱스 찾는 로직
+                for (int i = 0; i < polygons.size(); i++) { //저장된 array에서 선택된 폴리곤 인덱스 찾는 로직
                     Polygon p = polygons.get(i);
-                    if (p.contains(startPoint)) {//만약 커서 좌표가 이 인덱스의 삼각형 안에 있었다면
+                    if (p.contains(startPoint)) {//만약 커서 좌표가 이 인덱스의 폴리곤 안에 있었다면
                         selectedPolygonIndex = i; //인덱스 설정
                         currentPoint = startPoint;
                         System.out.println("Selected Polygons Index: " + selectedPolygonIndex);
@@ -84,23 +84,35 @@ public class GPolHandler extends MouseAdapter {
                 startPoint = currentPoint;
                 panel.repaint();
             } else if (!isMoving) {
-                // Drawing mode
-                int x1 = startPoint.x;
-                int y1 = currentPoint.y;
+            	// Drawing mode
+            	tempPolygon.reset();
 
-                int x2 = (startPoint.x + currentPoint.x) / 2;
-                int y2 = startPoint.y;
+            	// 마우스 드래그로 생성된 사각형의 치수 계산
+            	int minX = Math.min(startPoint.x, currentPoint.x);
+            	int maxX = Math.max(startPoint.x, currentPoint.x);
+            	int minY = Math.min(startPoint.y, currentPoint.y);
+            	int maxY = Math.max(startPoint.y, currentPoint.y);
+            	int width = maxX - minX;
+            	int height = maxY - minY;
 
-                int x3 = currentPoint.x;
-                int y3 = currentPoint.y;
+            	// 오각형의 다섯 꼭짓점 계산
+            	// 상단 중앙
+            	tempPolygon.addPoint(minX + width/2, minY);
 
-                tempPolygon.reset();
-                tempPolygon.addPoint(x1, y1);
-                tempPolygon.addPoint(x2, y2);
-                tempPolygon.addPoint(x3, y3);
+            	// 우측 상단 (오른쪽 1/4 지점)
+            	tempPolygon.addPoint(minX + width, minY + height/3);
 
-                panel.setTempPolygon(tempPolygon);
-                panel.repaint();
+            	// 우측 하단
+            	tempPolygon.addPoint(minX + 4*width/5, maxY);
+
+            	// 좌측 하단
+            	tempPolygon.addPoint(minX + width/5, maxY);
+
+            	// 좌측 상단 (왼쪽 1/4 지점)
+            	tempPolygon.addPoint(minX, minY + height/3);
+
+            	panel.setTempPolygon(tempPolygon);
+            	panel.repaint();
             }
         }
     }
@@ -108,9 +120,9 @@ public class GPolHandler extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (polButton != null && polButton.isSelected() && !isMoving) {
-            if (tempPolygon != null && tempPolygon.npoints == 3) {
+            if (tempPolygon != null && tempPolygon.npoints == 5) { //꼭짓점이 다섯개일때
                 System.out.println("Polygon add 완");
-                panel.addPolygon(new Polygon(tempPolygon.xpoints, tempPolygon.ypoints, 3));
+                panel.addPolygon(new Polygon(tempPolygon.xpoints, tempPolygon.ypoints, 5));
             }
         }
         
