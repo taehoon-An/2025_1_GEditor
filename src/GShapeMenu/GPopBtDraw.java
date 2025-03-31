@@ -5,6 +5,7 @@ import javax.swing.JMenuItem;
 import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
+import GHandler.GTextHandler;
 import GHandler.GTriHandler;
 
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
     private GTriHandler triHandler;
     private GPolHandler polHandler;
     private GOvalHandler ovalHandler;
+    private GTextHandler textHandler;
 
     public GPopBtDraw() {
         super("Draw");
@@ -89,5 +91,20 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
             
         });
 
+    }
+    
+    public void initialize(GTextHandler handler) {
+        this.textHandler = handler;
+        this.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(handler != null) {
+                    handler.setMovingMode(false);
+                    System.out.println("Draw 선택");
+                } else {
+                    System.out.println("Draw 선택안됨");
+                }
+            }
+        });
     }
 }

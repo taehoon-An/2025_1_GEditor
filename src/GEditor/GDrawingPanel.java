@@ -10,10 +10,12 @@ import javax.swing.JPanel;
 import GButton.GOvalButton;
 import GButton.GPolButton;
 import GButton.GRecButton;
+import GButton.GTextButton;
 import GButton.GTriButton;
 import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
+import GHandler.GTextHandler;
 import GHandler.GTriHandler;
 
 public class GDrawingPanel extends JPanel {
@@ -22,6 +24,7 @@ public class GDrawingPanel extends JPanel {
     private ArrayList<Polygon> triangles;
     private ArrayList<Polygon> polygons;
     private ArrayList<Rectangle> ovals;
+    private ArrayList<GTextBox> textBoxes;
     private GRecButton recButton;
     private GRecHandler recHandler;
     private GTriButton triButton;
@@ -30,17 +33,21 @@ public class GDrawingPanel extends JPanel {
     private GPolHandler polHandler;
     private GOvalButton ovalButton;
     private GOvalHandler ovalHandler;
+    private GTextButton textButton;
+    private GTextHandler textHandler;
     
     Rectangle tempRectangle;
     Polygon tempTriangle;
     Polygon tempPolygon;
     Rectangle tempOval;
+    GTextBox tempTextBox;
 
     public GDrawingPanel() {
         this.rectangles = new ArrayList<>();
         this.triangles = new ArrayList<>();
         this.polygons = new ArrayList<>();
         this.ovals = new ArrayList<>();
+        this.textBoxes = new ArrayList<>();
     }
     
     public void setRecHandler(GRecHandler handler) {
@@ -57,6 +64,10 @@ public class GDrawingPanel extends JPanel {
     
     public void setOvalHandler(GOvalHandler handler) {
     	this.ovalHandler = handler;
+    }
+    
+    public void setTextHandler(GTextHandler handler) {
+    	this.textHandler = handler;
     }
 
     public void setRecButton(GRecButton recButton) {
@@ -86,6 +97,13 @@ public class GDrawingPanel extends JPanel {
     		ovalHandler.setOvalButton(ovalButton);
     	}
     }
+    
+    public void setTextButton(GTextButton textButton) {
+        this.textButton = textButton;
+        if (textHandler != null) {
+        	textHandler.setTextButton(textButton);
+        }
+    }
 
     public void initialize() {
         if(recHandler != null) {
@@ -103,6 +121,10 @@ public class GDrawingPanel extends JPanel {
         if(ovalHandler != null) {
         	this.addMouseListener(ovalHandler);
             this.addMouseMotionListener(ovalHandler);
+        }
+        if(textHandler != null) {
+        	this.addMouseListener(textHandler);
+        	this.addMouseMotionListener(textHandler);
         }
     }
     
@@ -132,6 +154,11 @@ public class GDrawingPanel extends JPanel {
     	repaint();
     }
     
+    public void addTextBox(GTextBox tB) {
+    	System.out.println("add Text Complete");
+        textBoxes.add(tB);
+        repaint();
+    }
     
     
     public void setTempRectangle(Rectangle tempRectangle) {
@@ -149,6 +176,10 @@ public class GDrawingPanel extends JPanel {
     public void setTempOval(Rectangle tempOval) {
     	this.tempOval = tempOval;
     }
+    
+    public void setTempTextBox(GTextBox textBox) {
+        this.tempTextBox = textBox;
+    }
 
     public ArrayList<Rectangle> getRectangles() {
         return rectangles; //move모드에서 쓰기 위한 정보
@@ -165,6 +196,10 @@ public class GDrawingPanel extends JPanel {
     public ArrayList<Rectangle> getOvals() {
     	return ovals;
     }
+    
+    public ArrayList<GTextBox> getTextBoxes() {
+        return textBoxes;
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -180,6 +215,9 @@ public class GDrawingPanel extends JPanel {
         }
         if(ovalButton != null) {
         	ovalDraw(g);
+        }
+        if(textButton != null) {
+        	textDraw(g);
         }
     }
 
@@ -234,5 +272,17 @@ public class GDrawingPanel extends JPanel {
             g.setColor(Color.BLUE);
             g.drawOval(tempOval.x,tempOval.y,tempOval.width,tempOval.height);
         }
+    }
+    
+    public void textDraw(Graphics g) {
+    	g.setColor(Color.BLACK);
+    	 for (GTextBox textBox : textBoxes) {
+             textBox.draw(g);
+         }
+         
+         // 임시 TextBox 그리기
+         if (tempTextBox != null) {
+             tempTextBox.draw(g);
+         }
     }
 }

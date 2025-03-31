@@ -74,5 +74,9 @@ public class GToolBar extends JToolBar {
 		return this.polygonButton;
 	}
 	
+	public GTextButton getTextButton() {
+        return this.textBoxButton;
+    }
+	
 	
 }

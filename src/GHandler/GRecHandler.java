@@ -15,6 +15,7 @@ public class GRecHandler extends MouseAdapter {
     private Point startPoint, currentPoint;
     private int selectedRectangleIndex = -1;
     private boolean isMoving = false;
+    private boolean isDrawing = false;
     public Rectangle tempRectangle;
 
     public GRecHandler(GDrawingPanel panel) {
@@ -28,6 +29,11 @@ public class GRecHandler extends MouseAdapter {
     public void setMovingMode(boolean mode) { //모드활성화 유무
         this.isMoving = mode;
         System.out.println("Moving Mode: " + mode);
+    }
+    
+    public void setDrawingMode(boolean mode) {
+    	this.isDrawing = mode;
+    	System.out.println("Drawing Mode: " + mode);
     }
 
     @Override

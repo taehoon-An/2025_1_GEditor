@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
+import GHandler.GTextHandler;
 import GHandler.GTriHandler;
 import GHandler.RightClickListener;
 
@@ -24,11 +25,12 @@ public class GMainFrame extends JFrame {
 	private GTriHandler triHandler;
 	private GPolHandler polHandler;
 	private GOvalHandler ovalHandler;
+	private GTextHandler textHandler;
 	
 	public GMainFrame() {
 		//attributes
-		this.setLocation(100, 200);
 		this.setSize(1080, 720);
+		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());	
 		
@@ -57,6 +59,7 @@ public class GMainFrame extends JFrame {
 		this.triHandler = new GTriHandler(drawingPanel);
 		this.polHandler = new GPolHandler(drawingPanel);
 		this.ovalHandler = new GOvalHandler(drawingPanel);
+		this.textHandler = new GTextHandler(drawingPanel);
 		
 		this.drawingPanel.setRecHandler(recHandler);
 		this.drawingPanel.setRecButton(toolBar.getRecButton());
@@ -66,11 +69,14 @@ public class GMainFrame extends JFrame {
 		this.drawingPanel.setPolButton(toolBar.getPolButton());
 		this.drawingPanel.setOvalHandler(ovalHandler);
 		this.drawingPanel.setOvalButton(toolBar.getOvalButton());
+		this.drawingPanel.setTextHandler(textHandler);
+        this.drawingPanel.setTextButton(toolBar.getTextButton());
 		
 		this.shapeMenu.initialize(recHandler);
 		this.shapeMenu.initialize(triHandler);
 		this.shapeMenu.initialize(polHandler);
 		this.shapeMenu.initialize(ovalHandler);
+		this.shapeMenu.initialize(textHandler);
 		
 		this.menuBar.initialize();
 		this.toolBar.initialize();

@@ -33,7 +33,7 @@ public class GOvalHandler extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (ovalButton != null && ovalButton.isSelected()) { //rec버튼 눌려있을때
+        if (ovalButton != null && ovalButton.isSelected()) { //oval버튼 눌려있을때
             startPoint = e.getPoint(); //처음 찍었을때 좌표 저장
             ArrayList<Rectangle> ovals = panel.getOvals(); //getter 
 
@@ -41,7 +41,7 @@ public class GOvalHandler extends MouseAdapter {
                 selectedOvalIndex = -1; //index 초기화 후 선택된 rectangles 찾는 로직
                 for (int i = 0; i < ovals.size(); i++) {
                     Rectangle o = ovals.get(i);
-                    if (o.contains(startPoint)) { //사각형 그림 안에 startpoint 좌표가있는지(커서가 안에 있는지)
+                    if (o.contains(startPoint)) { //oval 그림 안에 startpoint 좌표가있는지(커서가 안에 있는지)
                         selectedOvalIndex = i; //인덱스만 저장
                         currentPoint = startPoint;
                         System.out.println("Selected Oval Index: " + selectedOvalIndex);
@@ -62,13 +62,13 @@ public class GOvalHandler extends MouseAdapter {
 
             if (isMoving && selectedOvalIndex != -1) {
                 //존재하는 rectangle 움직이기
-                ArrayList<Rectangle> ovals = panel.getOvals(); //panel에 저장되어있는 Rectangle어레이 가져오기
-                Rectangle selectedOval = ovals.get(selectedOvalIndex);//아까 저장되어있던 index에 의해 사각형 가져오기
+                ArrayList<Rectangle> ovals = panel.getOvals(); //panel에 저장되어있는 Oval어레이 가져오기
+                Rectangle selectedOval = ovals.get(selectedOvalIndex);//아까 저장되어있던 index에 의해 oval 가져오기
                 
                 int dx = currentPoint.x - startPoint.x;
                 int dy = currentPoint.y - startPoint.y;
 
-                // 움직일때만 새로운 rectangle을 만들어 실시간 움직이는 사각형 그리기 위한 사각형
+                // 움직일때만 새로운 Oval을 만들어 실시간 움직이는 사각형 그리기 위한 사각형
                 Rectangle movedOval = new Rectangle(
                     selectedOval.x + dx, 
                     selectedOval.y + dy, 
@@ -77,7 +77,7 @@ public class GOvalHandler extends MouseAdapter {
                 );
                 
                 
-                ovals.set(selectedOvalIndex, movedOval);//실시간으로 움직이는 rectangle 정보 꺼냈던 array인덱스에 저장
+                ovals.set(selectedOvalIndex, movedOval);//실시간으로 움직이는 Oval 정보 꺼냈던 array인덱스에 저장
                 
                 startPoint = currentPoint;
                 panel.repaint();
