@@ -4,13 +4,15 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import GButton.GPolButton;
 import GButton.GTriButton;
 import GEditor.GDrawingPanel;
 
-public class GPolHandler extends MouseAdapter {
+public class GPolHandler implements MouseListener, MouseMotionListener {
 	private GDrawingPanel panel;
     private GPolButton polButton;
     private Point startPoint, currentPoint;
@@ -130,5 +132,29 @@ public class GPolHandler extends MouseAdapter {
         selectedPolygonIndex = -1;
         panel.repaint();
     }
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

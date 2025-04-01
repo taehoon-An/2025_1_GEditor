@@ -1,15 +1,18 @@
 package GHandler;
 
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import GButton.GRecButton;
 import GEditor.GDrawingPanel;
 
-public class GRecHandler extends MouseAdapter {
+public class GRecHandler implements MouseListener, MouseMotionListener  {
     private GDrawingPanel panel;
     private GRecButton recButton;
     private Point startPoint, currentPoint;
@@ -55,6 +58,7 @@ public class GRecHandler extends MouseAdapter {
                 }
             } else {
                 // Not in moving mode, prepare for drawing
+            	currentPoint = startPoint;
                 tempRectangle = new Rectangle(startPoint.x, startPoint.y, 0, 0);
             }
         }
@@ -63,9 +67,9 @@ public class GRecHandler extends MouseAdapter {
     @Override
     public void mouseDragged(MouseEvent e) {
         if (recButton != null && recButton.isSelected()) {
-            currentPoint = e.getPoint();
 
             if (isMoving && selectedRectangleIndex != -1) {
+            	currentPoint = e.getPoint();
                 //존재하는 rectangle 움직이기
                 ArrayList<Rectangle> rectangles = panel.getRectangles(); //panel에 저장되어있는 Rectangle어레이 가져오기
                 Rectangle selectedRectangle = rectangles.get(selectedRectangleIndex);//아까 저장되어있던 index에 의해 사각형 가져오기
@@ -88,14 +92,27 @@ public class GRecHandler extends MouseAdapter {
                 panel.repaint();
             } else if (!isMoving) {
                 // Drawing mode
+            	if (tempRectangle != null) {
+                    Graphics2D g2d = (Graphics2D) panel.getGraphics();
+                    g2d.setXORMode(panel.getBackground());
+                    g2d.drawRect(tempRectangle.x, tempRectangle.y, tempRectangle.width, tempRectangle.height);
+                }
+
+                // 새 좌표 계산
+                currentPoint = e.getPoint();
                 int x = Math.min(startPoint.x, currentPoint.x);
                 int y = Math.min(startPoint.y, currentPoint.y);
                 int width = Math.abs(startPoint.x - currentPoint.x);
                 int height = Math.abs(startPoint.y - currentPoint.y);
 
+                // 새 사각형 생성 및 그리기
                 tempRectangle = new Rectangle(x, y, width, height);
+                Graphics2D g2d = (Graphics2D) panel.getGraphics();
+                g2d.setXORMode(panel.getBackground());
+                g2d.drawRect(tempRectangle.x, tempRectangle.y, tempRectangle.width, tempRectangle.height);
+                
+                // tempRectangle을 panel에 설정 (release 이벤트에서 사용)
                 panel.setTempRectangle(tempRectangle);
-                panel.repaint();
             }
         }
     }
@@ -113,4 +130,28 @@ public class GRecHandler extends MouseAdapter {
         selectedRectangleIndex = -1;
         panel.repaint();
     }
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

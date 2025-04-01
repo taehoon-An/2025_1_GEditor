@@ -6,6 +6,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import javax.swing.JPanel;
+import java.awt.Graphics2D;
 
 import GButton.GOvalButton;
 import GButton.GPolButton;
@@ -133,31 +134,26 @@ public class GDrawingPanel extends JPanel {
     public void addRectangle(Rectangle r) {
     	System.out.println("add Rec Complete");
         rectangles.add(r);//Handler에서 작동하는 rec정보 여기 어레이에 저장
-        repaint();
     }
     
     public void addTriangle(Polygon t) {
     	System.out.println("add Tri Complete");
         triangles.add(t);//Handler에서 작동하는 rec정보 여기 어레이에 저장
-        repaint();
     }
     
     public void addPolygon(Polygon t) {
     	System.out.println("add Pol Complete");
     	polygons.add(t);
-    	repaint();
     }
     
     public void addOval(Rectangle o) {
     	System.out.println("add Oval Complete");
     	ovals.add(o);
-    	repaint();
     }
     
     public void addTextBox(GTextBox tB) {
     	System.out.println("add Text Complete");
         textBoxes.add(tB);
-        repaint();
     }
     
     
@@ -204,8 +200,10 @@ public class GDrawingPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g); 
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setXORMode(getBackground());
         if(recButton != null) {
-        	recDraw(g);
+        	recDraw(g2);
         }
         if(triButton != null) {
         	triDraw(g);
@@ -221,15 +219,17 @@ public class GDrawingPanel extends JPanel {
         }
     }
 
-    public void recDraw(Graphics g) { //현재 내부에 저장되어있는 Rectangle Array 정보를 paint하는 메서드
-        g.setColor(Color.RED);
+    public void recDraw(Graphics2D g2) { //현재 내부에 저장되어있는 Rectangle Array 정보를 paint하는 메서드
+        g2.setColor(Color.RED);
+        g2.setXORMode(getBackground());
         for (Rectangle r : rectangles) {
-            g.drawRect(r.x, r.y, r.width, r.height);
+            g2.drawRect(r.x, r.y, r.width, r.height);
         }
         
         if (recHandler.tempRectangle != null) {//실시간 draw 출력
-            g.setColor(Color.BLUE);
-            g.drawRect(tempRectangle.x, tempRectangle.y
+        	System.out.println("looping");
+            g2.setColor(Color.BLUE);
+            g2.drawRect(tempRectangle.x, tempRectangle.y
             		,tempRectangle.width, tempRectangle.height);
         }
         
@@ -281,7 +281,7 @@ public class GDrawingPanel extends JPanel {
          }
          
          // 임시 TextBox 그리기
-         if (tempTextBox != null) {
+         if (textHandler.tempTextBox != null) {
              tempTextBox.draw(g);
          }
     }

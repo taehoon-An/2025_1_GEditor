@@ -4,13 +4,15 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import GButton.GOvalButton;
 import GButton.GRecButton;
 import GEditor.GDrawingPanel;
 
-public class GOvalHandler extends MouseAdapter {
+public class GOvalHandler implements MouseListener, MouseMotionListener {
 	private GDrawingPanel panel;
     private GOvalButton ovalButton;
     private Point startPoint, currentPoint;
@@ -108,5 +110,29 @@ public class GOvalHandler extends MouseAdapter {
         selectedOvalIndex = -1;
         panel.repaint();
     }
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

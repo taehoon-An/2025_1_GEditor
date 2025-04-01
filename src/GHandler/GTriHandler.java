@@ -4,12 +4,14 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import GButton.GTriButton;
 import GEditor.GDrawingPanel;
 
-public class GTriHandler extends MouseAdapter {
+public class GTriHandler implements MouseListener, MouseMotionListener {
     private GDrawingPanel panel;
     private GTriButton triButton;
     private Point startPoint, currentPoint;
@@ -118,4 +120,28 @@ public class GTriHandler extends MouseAdapter {
         selectedTriangleIndex = -1;
         panel.repaint();
     }
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

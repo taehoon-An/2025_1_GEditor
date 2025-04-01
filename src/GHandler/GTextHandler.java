@@ -6,13 +6,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import GButton.GTextButton;
 import GEditor.GDrawingPanel;
 import GEditor.GTextBox;
 
-public class GTextHandler extends MouseAdapter {
+public class GTextHandler implements MouseListener, MouseMotionListener {
 	private GDrawingPanel panel;
     private GTextButton textButton;
     private Point startPoint, currentPoint;
@@ -146,4 +148,28 @@ public class GTextHandler extends MouseAdapter {
             panel.repaint();
         }
     }
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
