@@ -1,5 +1,6 @@
 package GHandler;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -57,7 +58,7 @@ public class GRecHandler implements MouseListener, MouseMotionListener  {
                     }
                 }
             } else {
-                // Not in moving mode, prepare for drawing
+                // Draw Mode일때 Pressed
             	currentPoint = startPoint;
                 tempRectangle = new Rectangle(startPoint.x, startPoint.y, 0, 0);
             }
@@ -66,6 +67,9 @@ public class GRecHandler implements MouseListener, MouseMotionListener  {
 
     @Override
     public void mouseDragged(MouseEvent e) {
+    	Graphics2D g2d = (Graphics2D) panel.getGraphics();
+    	g2d.setColor(Color.BLUE); //drag할때 특정 색깔지정
+        g2d.setXORMode(panel.getBackground());
         if (recButton != null && recButton.isSelected()) {
 
             if (isMoving && selectedRectangleIndex != -1) {
@@ -73,6 +77,9 @@ public class GRecHandler implements MouseListener, MouseMotionListener  {
                 //존재하는 rectangle 움직이기
                 ArrayList<Rectangle> rectangles = panel.getRectangles(); //panel에 저장되어있는 Rectangle어레이 가져오기
                 Rectangle selectedRectangle = rectangles.get(selectedRectangleIndex);//아까 저장되어있던 index에 의해 사각형 가져오기
+                //set되어있던 array의 rectangle실시간으로 그려서 xor모드에 의해 잔상 삭제
+                g2d.drawRect(selectedRectangle.x,selectedRectangle.y,selectedRectangle.width,selectedRectangle.height);
+                
                 
                 int dx = currentPoint.x - startPoint.x;
                 int dy = currentPoint.y - startPoint.y;
@@ -84,19 +91,14 @@ public class GRecHandler implements MouseListener, MouseMotionListener  {
                     selectedRectangle.width, 
                     selectedRectangle.height
                 );
-                
+                g2d.drawRect(movedRectangle.x, movedRectangle.y, movedRectangle.width, movedRectangle.height);
                 
                 rectangles.set(selectedRectangleIndex, movedRectangle);//실시간으로 움직이는 rectangle 정보 꺼냈던 array인덱스에 저장
                 
                 startPoint = currentPoint;
-                panel.repaint();
             } else if (!isMoving) {
-                // Drawing mode
-            	if (tempRectangle != null) {
-                    Graphics2D g2d = (Graphics2D) panel.getGraphics();
-                    g2d.setXORMode(panel.getBackground());
+                // Drawing mode 다시그려 잔상 삭제
                     g2d.drawRect(tempRectangle.x, tempRectangle.y, tempRectangle.width, tempRectangle.height);
-                }
 
                 // 새 좌표 계산
                 currentPoint = e.getPoint();
@@ -107,8 +109,6 @@ public class GRecHandler implements MouseListener, MouseMotionListener  {
 
                 // 새 사각형 생성 및 그리기
                 tempRectangle = new Rectangle(x, y, width, height);
-                Graphics2D g2d = (Graphics2D) panel.getGraphics();
-                g2d.setXORMode(panel.getBackground());
                 g2d.drawRect(tempRectangle.x, tempRectangle.y, tempRectangle.width, tempRectangle.height);
                 
                 // tempRectangle을 panel에 설정 (release 이벤트에서 사용)
@@ -128,7 +128,7 @@ public class GRecHandler implements MouseListener, MouseMotionListener  {
         
         tempRectangle = null;
         selectedRectangleIndex = -1;
-        panel.repaint();
+        panel.repaint(); //없으면 지정한 색깔이 제대로 paint되지 않음. 
     }
 
 	@Override

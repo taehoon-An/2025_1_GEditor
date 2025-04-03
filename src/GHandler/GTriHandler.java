@@ -1,5 +1,7 @@
 package GHandler;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
@@ -50,7 +52,8 @@ public class GTriHandler implements MouseListener, MouseMotionListener {
                     }
                 }
             } else {
-                // Not in moving mode, prepare for drawing
+                // Draw Mode일때 Pressed
+            	currentPoint = startPoint;
                 tempTriangle = new Polygon();
             }
         }
@@ -58,12 +61,18 @@ public class GTriHandler implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
+    	Graphics2D g2d = (Graphics2D) panel.getGraphics();
+    	g2d.setColor(Color.BLUE); //drag할때 특정 색깔지정
+        g2d.setXORMode(panel.getBackground());
         if (triButton != null && triButton.isSelected()) {//triangle버튼 선택되어있을떄
-            currentPoint = e.getPoint();//
 
             if (isMoving && selectedTriangleIndex != -1) {//만약 move모드면
+            	currentPoint = e.getPoint();
+            	
                 ArrayList<Polygon> triangles = panel.getTriangles();//getter
                 Polygon selectedTriangle = triangles.get(selectedTriangleIndex);//선택한 index삼각형 정보 저장
+                //움직이기 전 그림 그려서 Xor모드에 의해 잔상삭제
+                g2d.drawPolygon(selectedTriangle);
                 
                 int dx = currentPoint.x - startPoint.x;
                 int dy = currentPoint.y - startPoint.y;
@@ -78,13 +87,16 @@ public class GTriHandler implements MouseListener, MouseMotionListener {
                 }
                 //저장한 새 좌표에 대해서 triangle좌표를 추가하기
                 Polygon movedTriangle = new Polygon(newXPoints, newYPoints, selectedTriangle.npoints);
-                
+                g2d.drawPolygon(movedTriangle);
                 // 새롭게 그리는 삼각형 정보를 선택한 인덱스 삼각형에 계속 저장
                 triangles.set(selectedTriangleIndex, movedTriangle);
                 //다시 drag할때 똑같이 계산하기 위해서 startPoint를 현재 좌표로 설정
                 startPoint = currentPoint;
-                panel.repaint();
             } else if (!isMoving) {
+            	//새로 전 그림 그려서 잔상삭제
+            	g2d.drawPolygon(tempTriangle);
+            	
+            	currentPoint = e.getPoint();
                 // Drawing mode (꼭짓점 좌표 세개)
                 int x1 = startPoint.x;
                 int y1 = currentPoint.y;
@@ -96,13 +108,14 @@ public class GTriHandler implements MouseListener, MouseMotionListener {
                 int y3 = currentPoint.y;
 
                 
-                tempTriangle.reset();
+                tempTriangle = new Polygon();
                 tempTriangle.addPoint(x1, y1);
                 tempTriangle.addPoint(x2, y2);
                 tempTriangle.addPoint(x3, y3);
+                
+                g2d.drawPolygon(tempTriangle);
 
                 panel.setTempTriangle(tempTriangle);
-                panel.repaint();
             }
         }
     }
@@ -118,7 +131,7 @@ public class GTriHandler implements MouseListener, MouseMotionListener {
         
         tempTriangle = null;
         selectedTriangleIndex = -1;
-        panel.repaint();
+        panel.repaint(); //없으면 release했을때 색깔이 제대로 나오지않
     }
 
 	@Override

@@ -1,5 +1,7 @@
 package GHandler;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -52,6 +54,7 @@ public class GOvalHandler implements MouseListener, MouseMotionListener {
                 }
             } else {
                 // Move모드 아닌 Draw모드일땐 그리기 준비
+            	currentPoint = startPoint; //Xor모드로 인해 다시 그려 잔상 없애기 위한 좌표
                 tempOval = new Rectangle(startPoint.x, startPoint.y, 0, 0);
             }
         }
@@ -59,13 +62,18 @@ public class GOvalHandler implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
+    	Graphics2D g2d = (Graphics2D) panel.getGraphics();
+    	g2d.setColor(Color.BLUE); //drag할때 특정 색깔지정
+        g2d.setXORMode(panel.getBackground());
         if (ovalButton != null && ovalButton.isSelected()) {
-            currentPoint = e.getPoint();
 
             if (isMoving && selectedOvalIndex != -1) {
+            	currentPoint = e.getPoint();
                 //존재하는 rectangle 움직이기
                 ArrayList<Rectangle> ovals = panel.getOvals(); //panel에 저장되어있는 Oval어레이 가져오기
                 Rectangle selectedOval = ovals.get(selectedOvalIndex);//아까 저장되어있던 index에 의해 oval 가져오기
+                //이동하기 전 그림다시 그려서 xor모드에 의해 삭제
+                g2d.drawOval(selectedOval.x, selectedOval.y, selectedOval.width, selectedOval.height);
                 
                 int dx = currentPoint.x - startPoint.x;
                 int dy = currentPoint.y - startPoint.y;
@@ -77,22 +85,28 @@ public class GOvalHandler implements MouseListener, MouseMotionListener {
                     selectedOval.width, 
                     selectedOval.height
                 );
-                
+                g2d.drawOval(movedOval.x, movedOval.y, movedOval.width, movedOval.height);
                 
                 ovals.set(selectedOvalIndex, movedOval);//실시간으로 움직이는 Oval 정보 꺼냈던 array인덱스에 저장
                 
                 startPoint = currentPoint;
-                panel.repaint();
             } else if (!isMoving) {
-                // Drawing mode
+                // Drawing mode 다시그려 잔상 삭제
+            	g2d.drawOval(tempOval.x, tempOval.y, tempOval.width, tempOval.height);
+            	
+            	//새좌표 계산
+            	currentPoint = e.getPoint();
                 int x = Math.min(startPoint.x, currentPoint.x);
                 int y = Math.min(startPoint.y, currentPoint.y);
                 int width = Math.abs(startPoint.x - currentPoint.x);
                 int height = Math.abs(startPoint.y - currentPoint.y);
 
+                // 새 Oval생성 및 그리기
                 tempOval = new Rectangle(x, y, width, height);
+                g2d.drawOval(tempOval.x, tempOval.y, tempOval.width, tempOval.height);
+                
+                //tempOval을 panel에 설정
                 panel.setTempOval(tempOval);
-                panel.repaint();
             }
         }
     }
@@ -108,7 +122,7 @@ public class GOvalHandler implements MouseListener, MouseMotionListener {
         
         tempOval = null;
         selectedOvalIndex = -1;
-        panel.repaint();
+        panel.repaint(); //있어야 release했을때 색깔 제대로 나옴
     }
 
 	@Override

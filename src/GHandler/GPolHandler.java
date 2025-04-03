@@ -1,5 +1,7 @@
 package GHandler;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
@@ -51,7 +53,8 @@ public class GPolHandler implements MouseListener, MouseMotionListener {
                     }
                 }
             } else {
-                // Not in moving mode, prepare for drawing
+                // Draw Mode일때 Pressed
+            	currentPoint = startPoint;
                 tempPolygon = new Polygon();
             }
         }
@@ -59,12 +62,18 @@ public class GPolHandler implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
+    	Graphics2D g2d = (Graphics2D) panel.getGraphics();
+    	g2d.setColor(Color.BLUE); //drag할때 특정 색깔지정
+        g2d.setXORMode(panel.getBackground());
         if (polButton != null && polButton.isSelected()) {//polygon버튼 선택되어있을떄
-            currentPoint = e.getPoint();//
 
             if (isMoving && selectedPolygonIndex != -1) {//만약 move모드면
+            	currentPoint = e.getPoint();//
+            	
                 ArrayList<Polygon> polygons = panel.getPolygons();//getter
                 Polygon selectedPolygon = polygons.get(selectedPolygonIndex);//선택한 index삼각형 정보 저장
+                //움직이기 전 그림 그려서 Xor모드에 의해 잔상 삭제
+                g2d.drawPolygon(selectedPolygon);
                 
                 int dx = currentPoint.x - startPoint.x;
                 int dy = currentPoint.y - startPoint.y;
@@ -79,16 +88,18 @@ public class GPolHandler implements MouseListener, MouseMotionListener {
                 }
                 
                 Polygon movedPolygon = new Polygon(newXPoints, newYPoints, selectedPolygon.npoints);
-                
+                g2d.drawPolygon(movedPolygon);
                 // 새롭게 그리는 삼각형 정보를 선택한 인덱스 삼각형에 계속 저장
                 polygons.set(selectedPolygonIndex, movedPolygon);
                 
                 startPoint = currentPoint;
-                panel.repaint();
             } else if (!isMoving) {
             	// Drawing mode
-            	tempPolygon.reset();
-
+            	//새로 다시 그려서 원래 잔상 없애는 로직 
+            	 g2d.drawPolygon(tempPolygon);
+            	
+            	currentPoint = e.getPoint();
+            	
             	// 마우스 드래그로 생성된 사각형의 치수 계산
             	int minX = Math.min(startPoint.x, currentPoint.x);
             	int maxX = Math.max(startPoint.x, currentPoint.x);
@@ -97,6 +108,7 @@ public class GPolHandler implements MouseListener, MouseMotionListener {
             	int width = maxX - minX;
             	int height = maxY - minY;
 
+            	tempPolygon = new Polygon();
             	// 오각형의 다섯 꼭짓점 계산
             	// 상단 중앙
             	tempPolygon.addPoint(minX + width/2, minY);
@@ -113,8 +125,8 @@ public class GPolHandler implements MouseListener, MouseMotionListener {
             	// 좌측 상단 (왼쪽 1/4 지점)
             	tempPolygon.addPoint(minX, minY + height/3);
 
+                g2d.drawPolygon(tempPolygon);
             	panel.setTempPolygon(tempPolygon);
-            	panel.repaint();
             }
         }
     }
@@ -130,7 +142,7 @@ public class GPolHandler implements MouseListener, MouseMotionListener {
         
         tempPolygon = null;
         selectedPolygonIndex = -1;
-        panel.repaint();
+        panel.repaint(); //있어야 release했을 때 색깔 제대로 나옴.
     }
 
 	@Override

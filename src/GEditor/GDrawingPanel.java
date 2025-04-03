@@ -199,11 +199,9 @@ public class GDrawingPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g); 
-        Graphics2D g2 = (Graphics2D)g;
-        g2.setXORMode(getBackground());
+        super.paintComponent(g);  //paintComponent에 XorMode를 사용하지 않으면 겹칠 때 사라지지 않음
         if(recButton != null) {
-        	recDraw(g2);
+        	recDraw(g);
         }
         if(triButton != null) {
         	triDraw(g);
@@ -219,59 +217,35 @@ public class GDrawingPanel extends JPanel {
         }
     }
 
-    public void recDraw(Graphics2D g2) { //현재 내부에 저장되어있는 Rectangle Array 정보를 paint하는 메서드
-        g2.setColor(Color.RED);
-        g2.setXORMode(getBackground());
+    public void recDraw(Graphics g) { //현재 내부에 저장되어있는 Rectangle Array 정보를 paint하는 메서드
+        g.setColor(Color.BLACK);
         for (Rectangle r : rectangles) {
-            g2.drawRect(r.x, r.y, r.width, r.height);
-        }
-        
-        if (recHandler.tempRectangle != null) {//실시간 draw 출력
-        	System.out.println("looping");
-            g2.setColor(Color.BLUE);
-            g2.drawRect(tempRectangle.x, tempRectangle.y
-            		,tempRectangle.width, tempRectangle.height);
+            g.drawRect(r.x, r.y, r.width, r.height);
         }
         
     }
         
     public void triDraw(Graphics g) { //현재 내부에 저장되어있는 Triangle Array 정보를 paint하는 메서드
-        g.setColor(Color.RED);
+        g.setColor(Color.BLACK);
         for (Polygon p : triangles) {
             g.drawPolygon(p);
         }
-        
-        if (triHandler.tempTriangle != null) {//실시간 draw 출력
-            g.setColor(Color.BLUE);
-            g.drawPolygon(tempTriangle);
-        }
-        
-
-    
+      
     }
     
     public void polDraw(Graphics g) { // 현재 내부에 저장되어있는 Polygon Array 정보를 paint하는 메서드
-    	g.setColor(Color.RED);
+    	g.setColor(Color.BLACK);
         for (Polygon p : polygons) {
             g.drawPolygon(p);
-        }
-        
-        if (polHandler.tempPolygon != null) {//실시간 draw 출력
-            g.setColor(Color.BLUE);
-            g.drawPolygon(tempPolygon);
         }
     }
     
     public void ovalDraw(Graphics g) {
-    	g.setColor(Color.RED);
+    	g.setColor(Color.BLACK);
         for (Rectangle o : ovals) {
             g.drawOval(o.x,o.y,o.width,o.height);
         }
         
-        if (ovalHandler.tempOval != null) {//실시간 draw 출력
-            g.setColor(Color.BLUE);
-            g.drawOval(tempOval.x,tempOval.y,tempOval.width,tempOval.height);
-        }
     }
     
     public void textDraw(Graphics g) {
