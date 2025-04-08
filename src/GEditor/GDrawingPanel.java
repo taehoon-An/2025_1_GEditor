@@ -18,10 +18,11 @@ import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
 import GHandler.GTriHandler;
+import GKindOfShapes.GRectangle;
 
 public class GDrawingPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    private ArrayList<Rectangle> rectangles;
+    private ArrayList<GRectangle> rectangles;
     private ArrayList<Polygon> triangles;
     private ArrayList<Polygon> polygons;
     private ArrayList<Rectangle> ovals;
@@ -37,7 +38,6 @@ public class GDrawingPanel extends JPanel {
     private GTextButton textButton;
     private GTextHandler textHandler;
     
-    Rectangle tempRectangle;
     Polygon tempTriangle;
     Polygon tempPolygon;
     Rectangle tempOval;
@@ -131,7 +131,7 @@ public class GDrawingPanel extends JPanel {
     
     
 
-    public void addRectangle(Rectangle r) {
+    public void addRectangle(GRectangle r) {
     	System.out.println("add Rec Complete");
         rectangles.add(r);//Handler에서 작동하는 rec정보 여기 어레이에 저장
     }
@@ -157,10 +157,6 @@ public class GDrawingPanel extends JPanel {
     }
     
     
-    public void setTempRectangle(Rectangle tempRectangle) {
-        this.tempRectangle = tempRectangle;
-    }
-    
     public void setTempTriangle(Polygon tempTriangle) {
         this.tempTriangle = tempTriangle;
     }
@@ -177,7 +173,7 @@ public class GDrawingPanel extends JPanel {
         this.tempTextBox = textBox;
     }
 
-    public ArrayList<Rectangle> getRectangles() {
+    public ArrayList<GRectangle> getRectangles() {
         return rectangles; //move모드에서 쓰기 위한 정보
     }
     
@@ -201,7 +197,10 @@ public class GDrawingPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  //paintComponent에 XorMode를 사용하지 않으면 겹칠 때 사라지지 않음
         if(recButton != null) {
-        	recDraw(g);
+        	for (GRectangle r : rectangles) {
+        		r.setPoint(r.x, r.y, r.width, r.height);
+                r.recDraw((Graphics2D)g);
+            }
         }
         if(triButton != null) {
         	triDraw(g);
@@ -215,14 +214,6 @@ public class GDrawingPanel extends JPanel {
         if(textButton != null) {
         	textDraw(g);
         }
-    }
-
-    public void recDraw(Graphics g) { //현재 내부에 저장되어있는 Rectangle Array 정보를 paint하는 메서드
-        g.setColor(Color.BLACK);
-        for (Rectangle r : rectangles) {
-            g.drawRect(r.x, r.y, r.width, r.height);
-        }
-        
     }
         
     public void triDraw(Graphics g) { //현재 내부에 저장되어있는 Triangle Array 정보를 paint하는 메서드
