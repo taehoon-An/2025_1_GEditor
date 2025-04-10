@@ -6,6 +6,7 @@ import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
+import GHandler.GTransformer;
 import GHandler.GTriHandler;
 
 import java.awt.event.ActionEvent;
@@ -18,12 +19,20 @@ public class GPopBtMove extends JMenuItem {
     private GPolHandler polHandler;
     private GOvalHandler ovalHandler;
     private GTextHandler textHandler;
+    
+    private GTransformer transformer;
 
     public GPopBtMove() {
         super("Move");
+        this.transformer = new GTransformer();
         
 
     }
+    
+    public void setTransformer(GTransformer transformer) {
+    	this.transformer = transformer;
+    }
+    
     
     public void initialize(GRecHandler handler) {
     	this.recHandler = handler;
@@ -31,7 +40,7 @@ public class GPopBtMove extends JMenuItem {
             @Override
             public void actionPerformed(ActionEvent e) {
             	if (handler != null) {
-                handler.setMovingMode(true);//MovingMode 활성화
+                transformer.setMovingMode(true);//MovingMode 활성화
                 System.out.println("Move모드 선택");
             	}
             }

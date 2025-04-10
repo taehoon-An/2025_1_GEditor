@@ -17,9 +17,11 @@ import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
+import GHandler.GTransformer;
 import GHandler.GTriHandler;
 import GKindOfShapes.GRectangle;
 
+//추가되는 Array와 이 Panel에 대한 Graphics 관리
 public class GDrawingPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private ArrayList<GRectangle> rectangles;
@@ -38,10 +40,12 @@ public class GDrawingPanel extends JPanel {
     private GTextButton textButton;
     private GTextHandler textHandler;
     
+    private GTransformer transformer;
     Polygon tempTriangle;
     Polygon tempPolygon;
     Rectangle tempOval;
     GTextBox tempTextBox;
+    
 
     public GDrawingPanel() {
         this.rectangles = new ArrayList<>();
@@ -49,6 +53,7 @@ public class GDrawingPanel extends JPanel {
         this.polygons = new ArrayList<>();
         this.ovals = new ArrayList<>();
         this.textBoxes = new ArrayList<>();
+        this.transformer = new GTransformer();
     }
     
     public void setRecHandler(GRecHandler handler) {
@@ -74,7 +79,7 @@ public class GDrawingPanel extends JPanel {
     public void setRecButton(GRecButton recButton) {
         this.recButton = recButton; //recbutton 눌리면 panel내부의 변수에 정보 저장
         if (recHandler != null) { //handler 사용중이면
-            recHandler.setRecButton(recButton); //GHandler 객체 내부의 recbutton 변수에도 저장
+            transformer.setRecButton(recButton); //GHandler 객체 내부의 recbutton 변수에도 저장
         }
     }
     
@@ -129,13 +134,6 @@ public class GDrawingPanel extends JPanel {
         }
     }
     
-    
-
-    public void addRectangle(GRectangle r) {
-    	System.out.println("add Rec Complete");
-        rectangles.add(r);//Handler에서 작동하는 rec정보 여기 어레이에 저장
-    }
-    
     public void addTriangle(Polygon t) {
     	System.out.println("add Tri Complete");
         triangles.add(t);//Handler에서 작동하는 rec정보 여기 어레이에 저장
@@ -175,6 +173,10 @@ public class GDrawingPanel extends JPanel {
 
     public ArrayList<GRectangle> getRectangles() {
         return rectangles; //move모드에서 쓰기 위한 정보
+    }
+    
+    public void setRectangles(ArrayList<GRectangle> rectangles) {
+    	this.rectangles = rectangles;
     }
     
     public ArrayList<Polygon> getTriangles() {
@@ -250,4 +252,8 @@ public class GDrawingPanel extends JPanel {
              tempTextBox.draw(g);
          }
     }
+
+	public GTransformer getTransformer() {
+		return this.transformer;
+	}
 }

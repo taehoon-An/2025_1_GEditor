@@ -6,6 +6,7 @@ import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
+import GHandler.GTransformer;
 import GHandler.GTriHandler;
 
 import java.awt.event.ActionEvent;
@@ -18,10 +19,18 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
     private GPolHandler polHandler;
     private GOvalHandler ovalHandler;
     private GTextHandler textHandler;
+    
+    private GTransformer transformer;
 
     public GPopBtDraw() {
         super("Draw");
+
         
+    }
+    
+    public void setTransformer(GTransformer transformer) {
+    	System.out.println(transformer);
+    	this.transformer = transformer;
     }
     
     //overloading해서 각 똑같은 이름의 메서드에서 매개변수만 다르게 메서드 관리
@@ -31,7 +40,7 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
             @Override
             public void actionPerformed(ActionEvent e) {
             	if(handler != null) {
-                handler.setMovingMode(false);
+                transformer.setMovingMode(false);
                 System.out.println("Draw 선택");
             	} else {
                 	System.out.println("Draw 선택안됨");

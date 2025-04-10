@@ -7,6 +7,7 @@ import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
+import GHandler.GTransformer;
 import GHandler.GTriHandler;
 import GShapeMenu.GPopBtDraw;
 import GShapeMenu.GPopBtMove;
@@ -32,6 +33,11 @@ public class GShape extends JPopupMenu {
 		this.menuItem4 = new JMenuItem("Rotate");
 		this.add(menuItem4);
 	}
+	
+	 public void setTransformer(GTransformer transformer) {
+		 this.drawMenu.setTransformer(transformer);
+		 this.moveMenu.setTransformer(transformer);
+	 }
 
 	 public void initialize(GRecHandler handler) {
 		 System.out.println("rec button clear");

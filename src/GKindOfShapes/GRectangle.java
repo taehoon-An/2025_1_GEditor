@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+//주어지는 정보로 rectangle관리 (draw
 public class GRectangle extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	

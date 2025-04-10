@@ -8,6 +8,7 @@ import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
+import GHandler.GTransformer;
 import GHandler.GTriHandler;
 import GHandler.RightClickListener;
 
@@ -26,6 +27,7 @@ public class GMainFrame extends JFrame {
 	private GPolHandler polHandler;
 	private GOvalHandler ovalHandler;
 	private GTextHandler textHandler;
+	private GTransformer transformer;
 	
 	public GMainFrame() {
 		//attributes
@@ -53,9 +55,11 @@ public class GMainFrame extends JFrame {
 	
 	public void initialize() {
 		 //마우스 우클릭 시 Shape조정 메뉴가 나오는 이벤트핸들러
-		this.drawingPanel.addMouseListener(new RightClickListener(this.shapeMenu));
+	//	this.drawingPanel.addMouseListener(new RightClickListener(this.shapeMenu));
+		this.transformer = this.drawingPanel.getTransformer();
 		
-		this.recHandler = new GRecHandler(drawingPanel);
+		
+		this.recHandler = new GRecHandler(drawingPanel, transformer);
 		this.triHandler = new GTriHandler(drawingPanel);
 		this.polHandler = new GPolHandler(drawingPanel);
 		this.ovalHandler = new GOvalHandler(drawingPanel);
@@ -72,6 +76,7 @@ public class GMainFrame extends JFrame {
 		this.drawingPanel.setTextHandler(textHandler);
         this.drawingPanel.setTextButton(toolBar.getTextButton());
 		
+        this.shapeMenu.setTransformer(transformer);
 		this.shapeMenu.initialize(recHandler);
 		this.shapeMenu.initialize(triHandler);
 		this.shapeMenu.initialize(polHandler);
