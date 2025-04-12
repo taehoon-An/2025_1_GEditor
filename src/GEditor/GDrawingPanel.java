@@ -7,18 +7,22 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 import GButton.GOvalButton;
 import GButton.GPolButton;
+import GButton.GPolLineButton;
 import GButton.GRecButton;
 import GButton.GTextButton;
 import GButton.GTriButton;
 import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
+import GHandler.GPolLineHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
 import GHandler.GTransformer;
 import GHandler.GTriHandler;
+import GKindOfShapes.GPolLine;
 import GKindOfShapes.GRectangle;
 
 //추가되는 Array와 이 Panel에 대한 Graphics 관리
@@ -29,6 +33,7 @@ public class GDrawingPanel extends JPanel {
     private ArrayList<Polygon> polygons;
     private ArrayList<Rectangle> ovals;
     private ArrayList<GTextBox> textBoxes;
+    private ArrayList<GPolLine> polLines;
     private GRecButton recButton;
     private GRecHandler recHandler;
     private GTriButton triButton;
@@ -39,8 +44,12 @@ public class GDrawingPanel extends JPanel {
     private GOvalHandler ovalHandler;
     private GTextButton textButton;
     private GTextHandler textHandler;
+    private GPolLineButton polLineButton;
+    private GPolLineHandler polLineHandler;
+    
     
     private GTransformer transformer;
+    
     Polygon tempTriangle;
     Polygon tempPolygon;
     Rectangle tempOval;
@@ -53,6 +62,7 @@ public class GDrawingPanel extends JPanel {
         this.polygons = new ArrayList<>();
         this.ovals = new ArrayList<>();
         this.textBoxes = new ArrayList<>();
+        this.polLines = new ArrayList<>();
         this.transformer = new GTransformer();
     }
     
@@ -74,6 +84,10 @@ public class GDrawingPanel extends JPanel {
     
     public void setTextHandler(GTextHandler handler) {
     	this.textHandler = handler;
+    }
+    
+    public void setPolLineHandler(GPolLineHandler handler) {
+    	this.polLineHandler = handler;
     }
 
     public void setRecButton(GRecButton recButton) {
@@ -110,6 +124,13 @@ public class GDrawingPanel extends JPanel {
         	textHandler.setTextButton(textButton);
         }
     }
+    
+    public void setPolLineButton(GPolLineButton polLineButton) {
+        this.polLineButton = polLineButton; //recbutton 눌리면 panel내부의 변수에 정보 저장
+        if (polLineHandler != null) { //handler 사용중이면
+            transformer.setPolLineButton(polLineButton); //GHandler 객체 내부의 recbutton 변수에도 저장
+        }
+    }
 
     public void initialize() {
         if(recHandler != null) {
@@ -131,6 +152,10 @@ public class GDrawingPanel extends JPanel {
         if(textHandler != null) {
         	this.addMouseListener(textHandler);
         	this.addMouseMotionListener(textHandler);
+        }
+        if(polLineHandler != null) {
+        	this.addMouseListener(polLineHandler);
+        	this.addMouseMotionListener(polLineHandler);
         }
     }
     
@@ -154,6 +179,11 @@ public class GDrawingPanel extends JPanel {
         textBoxes.add(tB);
     }
     
+    public void addPolLine(GPolLine line) {
+        System.out.println("add PolLine Complete");
+        polLines.add(line);
+    }
+    
     
     public void setTempTriangle(Polygon tempTriangle) {
         this.tempTriangle = tempTriangle;
@@ -175,8 +205,16 @@ public class GDrawingPanel extends JPanel {
         return rectangles; //move모드에서 쓰기 위한 정보
     }
     
+    public ArrayList<GPolLine> getPolLines() {
+        return polLines;
+    }
+    
     public void setRectangles(ArrayList<GRectangle> rectangles) {
     	this.rectangles = rectangles;
+    }
+    
+    public void setPolLines(ArrayList<GPolLine> polLines) {
+        this.polLines = polLines;
     }
     
     public ArrayList<Polygon> getTriangles() {
@@ -215,6 +253,16 @@ public class GDrawingPanel extends JPanel {
         }
         if(textButton != null) {
         	textDraw(g);
+        }
+        if(polLineButton != null) {
+        	for (GPolLine l : polLines) {
+        		l.polLinedraw((Graphics2D)g);
+            }
+        	GPolLine tempLine = transformer.getTempLine();
+        	    if (tempLine != null && tempLine.getPointCount() > 1) {
+        	    	g.setColor(Color.BLUE);;
+        	        tempLine.polLinedraw((Graphics2D)g);
+        	    }
         }
     }
         

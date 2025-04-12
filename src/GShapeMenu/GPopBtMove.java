@@ -4,6 +4,7 @@ import javax.swing.JMenuItem;
 
 import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
+import GHandler.GPolLineHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
 import GHandler.GTransformer;
@@ -19,6 +20,7 @@ public class GPopBtMove extends JMenuItem {
     private GPolHandler polHandler;
     private GOvalHandler ovalHandler;
     private GTextHandler textHandler;
+    private GPolLineHandler polLineHandler;
     
     private GTransformer transformer;
 
@@ -98,4 +100,18 @@ public class GPopBtMove extends JMenuItem {
             }
         });
     }
+
+	public void initialize(GPolLineHandler handler) {
+		this.polLineHandler = handler;
+    	this.addActionListener(new ActionListener() { //만약 Move메뉴선택됐으면
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if (handler != null) {
+                transformer.setMovingMode(true);//MovingMode 활성화
+                System.out.println("Move모드 선택");
+            	}
+            }
+        }); 
+		
+	}
 }

@@ -5,6 +5,7 @@ import javax.swing.JPopupMenu;
 
 import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
+import GHandler.GPolLineHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
 import GHandler.GTransformer;
@@ -68,4 +69,10 @@ public class GShape extends JPopupMenu {
 		 	this.drawMenu.initialize(handler);
 		 	this.moveMenu.initialize(handler);
 	 }
+
+	public void initialize(GPolLineHandler handler) {
+			this.drawMenu.initialize(handler);
+		 	this.moveMenu.initialize(handler);
+		
+	}
 }

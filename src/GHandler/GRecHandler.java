@@ -58,7 +58,8 @@ public class GRecHandler implements MouseListener, MouseMotionListener  {
 			Graphics2D g2d = (Graphics2D) panel.getGraphics();
 	        g2d.setXORMode(panel.getBackground());
 	        if(transformer.getTempRectangle() == null) {
-	        	transformer.start(g2d, e.getPoint(), panel.getRectangles());	
+	        	transformer.start(g2d, e.getPoint());
+	        	transformer.setRectangles(panel.getRectangles());
 	        } else if(transformer.getTempRectangle() != null) {
 	        	transformer.finish();
 	        	panel.setRectangles(transformer.getRectangles());

@@ -4,6 +4,7 @@ import javax.swing.JMenuItem;
 
 import GHandler.GOvalHandler;
 import GHandler.GPolHandler;
+import GHandler.GPolLineHandler;
 import GHandler.GRecHandler;
 import GHandler.GTextHandler;
 import GHandler.GTransformer;
@@ -19,6 +20,7 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
     private GPolHandler polHandler;
     private GOvalHandler ovalHandler;
     private GTextHandler textHandler;
+    private GPolLineHandler polLineHandler;
     
     private GTransformer transformer;
 
@@ -116,4 +118,20 @@ public class GPopBtDraw extends JMenuItem { //overloading을 활용
             }
         });
     }
+
+	public void initialize(GPolLineHandler handler) {
+		this.polLineHandler = handler;
+		this.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if(handler != null) {
+                transformer.setMovingMode(false);
+                System.out.println("Draw 선택");
+            	} else {
+                	System.out.println("Draw 선택안됨");
+                }
+            }
+            
+        });
+	}
 }
