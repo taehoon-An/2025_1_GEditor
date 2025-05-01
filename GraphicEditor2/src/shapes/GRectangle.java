@@ -27,7 +27,6 @@ public class GRectangle extends GShape{
 		this.rectangle.setFrame(ox,oy,w,h);
 	}
 	
-	Rectangle getR = new Rectangle();
 
 	
 }

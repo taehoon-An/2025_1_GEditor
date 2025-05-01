@@ -7,8 +7,16 @@ import shapes.GRectangle;
 import shapes.GShape;
 
 //√ﬂªÛ»≠ Device
-public interface GTransformer {
-    public void start(Graphics2D g, int x, int y);
-    public void drag(Graphics2D g, int x, int y);
-    public GShape finish(Graphics2D g, int x, int y);
+public abstract class GTransformer {
+	
+	protected GShape shape;
+	
+	public GTransformer(GShape shape) {
+		this.shape = shape;
+	}
+	
+	
+    public abstract void start(Graphics2D g, int x, int y);
+    public abstract void drag(Graphics2D g, int x, int y);
+    public abstract void finish(Graphics2D g, int x, int y);
 }

@@ -9,9 +9,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
 
-import Buttons.GRecButton;
-import Buttons.GTriButton;
 import frames.GDrawingPanel.EDrawingType;
+import shapes.GPolygon;
 import shapes.GRectangle;
 import shapes.GShape;
 
@@ -19,30 +18,30 @@ public class GShapeToolBar extends JToolBar {
 	private static final long serialVersionUID = 1L;
 
 	
-	public enum EShapeType {
+	public enum EShapeTool {
 		//일단 GRectangle밖에 없으니 GRectangle로
 		eSelect("select", EDrawingType.e2P, GRectangle.class),
 		eRectangle("Rectangle", EDrawingType.e2P, GRectangle.class),
 		eEllipse("Ellipse", EDrawingType.e2P, GRectangle.class),
 		eLine("Line", EDrawingType.e2P, GRectangle.class),
-		ePolygon("Polygon",EDrawingType.eNP, GRectangle.class);
+		ePolygon("Polygon",EDrawingType.eNP, GPolygon.class);
 		
 		private String name;
 		private EDrawingType eDrawingType;
 		private Class<?> classShape; //타입미지정
 		
-		private EShapeType(String name, EDrawingType eDrawingType, Class<?> classShape) {
+		private EShapeTool(String name, EDrawingType eDrawingType, Class<?> classShape) {
 			this.name = name;
 			this.eDrawingType = eDrawingType;
 			this.classShape = classShape;
 		}
 		
 		
-		String getName() {
+		public String getName() {
 			return this.name;
 		}
 		
-		EDrawingType getEDrawingType() {
+		public EDrawingType getEDrawingType() {
 			return this.eDrawingType;
 		}
 		
@@ -65,8 +64,8 @@ public class GShapeToolBar extends JToolBar {
 	
 	public GShapeToolBar() {
 		ButtonGroup group = new ButtonGroup();//다중선택이 되지 못하게 막는 그룹화
-		for(EShapeType eShapeType : EShapeType.values()) {//enum은 Array처럼 작동하기에 .values사용
-			JRadioButton radioButton = new GRecButton(eShapeType.getName()); //매개변수 자리에 String을 원하는 문자로 써주면
+		for(EShapeTool eShapeType : EShapeTool.values()) {//enum은 Array처럼 작동하기에 .values사용
+			JRadioButton radioButton = new JRadioButton(eShapeType.getName()); //매개변수 자리에 String을 원하는 문자로 써주면
 			ActionHandler actionHandler = new ActionHandler();
 			radioButton.addActionListener(actionHandler);
 			radioButton.setActionCommand(eShapeType.toString());
@@ -93,8 +92,9 @@ public class GShapeToolBar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String sShapeType = e.getActionCommand();
-			EShapeType eShapeType = EShapeType.valueOf(sShapeType);
-			drawingPanel.setEShapeType(eShapeType);
+			EShapeTool eShapeType = EShapeTool.valueOf(sShapeType);
+			drawingPanel.setEShapeTool(eShapeType);
+			System.out.println(eShapeType.getName());
 		}
 		
 	}

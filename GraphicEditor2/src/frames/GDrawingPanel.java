@@ -11,7 +11,7 @@ import java.util.Vector;
 import javax.swing.JPanel;
 
 import frames.GDrawingPanel.EDrawingState;
-import frames.GShapeToolBar.EShapeType;
+import frames.GShapeToolBar.EShapeTool;
 import shapes.GRectangle;
 import shapes.GShape;
 import transformer.GTransformer;
@@ -19,8 +19,6 @@ import transformer.GDrawer;
 
 public class GDrawingPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-
-	private GTransformer transformer;
 	//Toolbar에서 이 Type중 하나를 선택하게 될 것임. 
 	
 	public enum EDrawingType {
@@ -35,8 +33,11 @@ public class GDrawingPanel extends JPanel {
 	}
 	
 	private Vector<GShape> shapes;
-	private EShapeType eShapeType; //toolbar에서 association에 의해 설정되도록
+	private GTransformer transformer;
+	private GShape currentShape;
+	private EShapeTool eShapeTool; //toolbar에서 association에 의해 설정되도록
 	private EDrawingState eDrawingState;
+	
 	
 	public GDrawingPanel() {
 		MouseHandler mouseHandler = new MouseHandler();
@@ -44,7 +45,7 @@ public class GDrawingPanel extends JPanel {
 		this.addMouseMotionListener(mouseHandler);
 		
 		this.shapes = new Vector<GShape>();
-		this.eShapeType = null;
+		this.eShapeTool = null;
 		this.eDrawingState = EDrawingState.eIdle;
 	}
 	
@@ -60,19 +61,23 @@ public class GDrawingPanel extends JPanel {
 
 	}
 	
-	public void setEShapeType(EShapeType eShapeType) { //toolbar에서 Type지정후 넣게
-		this.eShapeType = eShapeType;
+	public void setEShapeTool (EShapeTool eShapeTool) { //toolbar에서 Type지정후 넣게
+		this.eShapeTool = eShapeTool;
 	}
 	
 	private void startDrawing(int x, int y){
 		// set shape
-		GShape shape = eShapeType.newShape(); //eshapeType 생성자로 Shape지정
-		this.transformer = new GDrawer(shape, GDrawingPanel.this);
+		if(eDrawingState == EDrawingState.eIdle) {
+			this.currentShape = eShapeTool.newShape(); //eshapeType 생성자로 Shape지정
+			this.shapes.add(currentShape);
+			this.transformer = new GDrawer(currentShape, eShapeTool);
+		}
 		this.transformer.start((Graphics2D)getGraphics(), x, y);
-	}
+	} 
 	
 	private void keepDrawing(int x, int y) {
 		this.transformer.drag((Graphics2D)getGraphics(), x, y);
+		this.repaint();
 	}
 	
 	private void addPoint(int x, int y) {
@@ -80,31 +85,52 @@ public class GDrawingPanel extends JPanel {
 	}
 	
 	private void finishDrawing(int x, int y) {
-		GShape shape = this.transformer.finish((Graphics2D)getGraphics(), x, y);
-        shapes.add(shape); // 완성된 도형을 shapes 벡터에 추가
-        repaint(); // 화면 갱신
+		this.transformer.finish((Graphics2D)getGraphics(), x, y);
+		this.transformer = null;
+        this.repaint(); // 화면 갱신
 	}
 	
 	private class MouseHandler implements MouseListener, MouseMotionListener {
 		//mapping function
 		
-		private GTransformer transformer;
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("mouseClick");
+			if(eDrawingState == EDrawingState.eIdle) {
+				if(eShapeTool.getEDrawingType() == EDrawingType.eNP && eShapeTool.getName() == EShapeTool.ePolygon.getName()) {
+					startDrawing(e.getX(), e.getY());
+					eDrawingState = EDrawingState.eNP;
+				}
+			} else if(eDrawingState == EDrawingState.eNP && e.getClickCount() == 1) {
+				if(eShapeTool.getEDrawingType() == EDrawingType.eNP && eShapeTool.getName() == EShapeTool.ePolygon.getName()) {
+					startDrawing(e.getX(), e.getY());
+				}
+			} else if(eDrawingState == EDrawingState.eNP && e.getClickCount() == 2) { //종료
+				if(eShapeTool.getEDrawingType() == EDrawingType.eNP && eShapeTool.getName() == EShapeTool.ePolygon.getName()) {
+					finishDrawing(e.getX(), e.getY());
+					eDrawingState = EDrawingState.eIdle;
+				}
+			}
+			
+		}
+		
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			if(eDrawingState == EDrawingState.eNP) {
+				keepDrawing(e.getX(), e.getY());
+			}
 			
 		}
 		
 		@Override
 		public void mousePressed(MouseEvent e) {
 			if(eDrawingState == EDrawingState.eIdle) {
-				if(eShapeType == EShapeType.eSelect) {
-					//set transformer
-				} else {
+				if(eShapeTool.getEDrawingType() == EDrawingType.e2P && eShapeTool.getName() == EShapeTool.eRectangle.getName()) {
 					startDrawing(e.getX(), e.getY());
-					eDrawingState = EDrawingState.e2P; //두개 점
-					
-				}
+					eDrawingState = EDrawingState.e2P; //State가 e2P로
+				} 
+				
+			//	if(eShapeTool.getEDrawingType() == EDrawingType.)
 				
 			}
 			
@@ -135,12 +161,6 @@ public class GDrawingPanel extends JPanel {
 		@Override
 		public void mouseExited(MouseEvent e) {
 			System.out.println("mouseExited");
-			
-		}
-		
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			System.out.println("mouseMoved");
 			
 		}
 
