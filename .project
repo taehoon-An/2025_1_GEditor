@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>GraphicEditor</name>
+=======
+	<name>GraphicEditor4</name>
+>>>>>>> 1a57bff (Shape 추상 클래스를 받아 Polygon까지 구현 후, Rectangle과 Polygon의 이동기능 까지 Transformer을 통해 구현, 그리고 Anchor 구현 완)
 	<comment></comment>
 	<projects>
 	</projects>
